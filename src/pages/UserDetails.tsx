@@ -102,7 +102,6 @@ const UserDetailsPage: React.FC = () => {
               Back to Users
             </Button>
             <h1 className="page-title">User Details & Posts</h1>
-            <p className="page-subtitle">Manage user information and their posts</p>
           </div>
 
           <UserCard user={user} />
