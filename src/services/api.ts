@@ -7,5 +7,6 @@ const api = axios.create({
 })
 
 export const fetchUsers = () => api.get<User[]>('/users')
+export const updateUser = (user: User) => api.put<User>(`/users/${user.id}`, user)
 
 export default api
