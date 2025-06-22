@@ -1,25 +1,24 @@
-import React, { useState } from 'react'
-import { Card, Button, Collapse, ButtonGroup, Row, Col, Form } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import { Card, Button, Collapse, Row, Col, Form } from 'react-bootstrap'
 import { User } from '../../types/user'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../utils/validations'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../store/store'
 import { toggleUserExpansion, updateUserAsync } from '../../store/slices/usersSlice'
 import InputField from '../InputField'
 import { getFieldError } from '../../utils/getFieldError'
 import { UserCardProps, UserFormData } from './interfaces'
 import { formFields } from './data'
 import { ChevronDown, ChevronUp, User as UserIcon, Mail, Eye } from 'lucide-react'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
-  const [isEditing, setIsEditing] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
-  const dispatch = useDispatch<AppDispatch>()
-  const { expandedUsers } = useSelector((state: RootState) => state.users)
+  const dispatch = useAppDispatch()
+  const { expandedUsers } = useAppSelector((state) => state.users)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const {
     handleSubmit,
@@ -47,7 +46,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   const watchedValues = watch()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hasChanged =
       watchedValues.username !== user.username ||
       watchedValues.email !== user.email ||
@@ -60,6 +59,8 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   const isExpanded = expandedUsers.includes(user.id)
 
+  const isUserDetails = location.pathname.includes('/users')
+
   const handleToggleExpansion = () => {
     dispatch(toggleUserExpansion(user.id))
   }
@@ -68,13 +69,8 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
     navigate(`/users/${user.id}`)
   }
 
-  const handleEdit = () => {
-    setIsEditing(true)
-  }
-
   const handleCancel = () => {
     reset()
-    setIsEditing(false)
     setHasChanges(false)
   }
 
@@ -89,7 +85,6 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
     }
 
     await dispatch(updateUserAsync(updatedUser))
-    setIsEditing(false)
     setHasChanges(false)
   }
 
@@ -123,7 +118,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                   <InputField
                     name={name}
                     label={label}
-                    readOnly={!isEditing}
+                    disabled={!isExpanded}
                     control={control}
                     error={getFieldError(errors, name)}
                   />
@@ -132,31 +127,27 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             </Row>
 
             <div className="d-flex justify-content-between align-items-center">
-              <Button
-                variant="outline-primary"
-                onClick={handleViewPosts}
-                className="d-flex align-items-center"
-              >
-                <Eye size={16} className="me-1" />
-                See Posts
-              </Button>
+              {!isUserDetails ? (
+                <Button
+                  variant="outline-primary"
+                  onClick={handleViewPosts}
+                  className="d-flex align-items-center"
+                >
+                  <Eye size={16} className="me-1" />
+                  See Posts
+                </Button>
+              ) : (
+                <div />
+              )}
 
-              <ButtonGroup>
-                {!isEditing ? (
-                  <Button variant="primary" onClick={handleEdit}>
-                    Edit
-                  </Button>
-                ) : (
-                  <React.Fragment>
-                    <Button variant="secondary" onClick={handleCancel}>
-                      Cancel
-                    </Button>
-                    <Button variant="success" type="submit" disabled={!hasChanges}>
-                      Save
-                    </Button>
-                  </React.Fragment>
-                )}
-              </ButtonGroup>
+              <div className="btn-actions">
+                <Button variant="secondary" onClick={handleCancel} disabled={!hasChanges}>
+                  Cancel
+                </Button>
+                <Button variant="success" type="submit" disabled={!hasChanges}>
+                  Save
+                </Button>
+              </div>
             </div>
           </Form>
         </Card.Body>

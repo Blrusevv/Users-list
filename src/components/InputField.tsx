@@ -6,7 +6,7 @@ interface InputFieldProps {
   name: string
   label: string
   type?: string
-  readOnly?: boolean
+  disabled?: boolean
   control: Control<any>
   error?: FieldError
 }
@@ -15,7 +15,7 @@ const InputField: React.FC<InputFieldProps> = ({
   name,
   label,
   type = 'text',
-  readOnly = false,
+  disabled = false,
   control,
   error,
 }) => {
@@ -26,7 +26,7 @@ const InputField: React.FC<InputFieldProps> = ({
         name={name}
         control={control}
         render={({ field }) => (
-          <Form.Control {...field} type={type} readOnly={readOnly} isInvalid={!!error} />
+          <Form.Control {...field} type={type} isInvalid={!!error} disabled={disabled} />
         )}
       />
       <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
