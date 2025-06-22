@@ -31,15 +31,15 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
     defaultValues: {
       username: user.username,
       email: user.email,
+      phone: user.phone ?? '',
+      website: user.website ?? '',
       address: {
         street: user.address.street,
         suite: user.address.suite,
         city: user.address.city,
       },
-      phone: user.phone,
-      website: user.website,
       company: {
-        name: user.company.name,
+        name: user.company?.name ?? '',
       },
     },
   })
@@ -52,8 +52,10 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
       watchedValues.email !== user.email ||
       watchedValues.address.street !== user.address.street ||
       watchedValues.address.suite !== user.address.suite ||
-      watchedValues.address.city !== user.address.city
-
+      watchedValues.address.city !== user.address.city ||
+      watchedValues.phone !== user.phone ||
+      watchedValues.website !== user.website ||
+      watchedValues.company?.name !== user.company?.name
     setHasChanges(hasChanged)
   }, [watchedValues, user])
 
@@ -79,8 +81,17 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
       ...user,
       username: data.username,
       email: data.email,
+      phone: data.phone || '',
+      website: data.website || '',
       address: {
         ...user.address,
+        street: data.address.street,
+        suite: data.address.suite,
+        city: data.address.city,
+      },
+      company: {
+        ...user.company,
+        name: data.company?.name ?? '',
       },
     }
 
