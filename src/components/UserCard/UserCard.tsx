@@ -72,7 +72,20 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
   }
 
   const handleCancel = () => {
-    reset()
+    reset({
+      username: user.username,
+      email: user.email,
+      phone: user.phone ?? '',
+      website: user.website ?? '',
+      address: {
+        street: user.address.street,
+        suite: user.address.suite,
+        city: user.address.city,
+      },
+      company: {
+        name: user.company?.name ?? '',
+      },
+    })
     setHasChanges(false)
   }
 
