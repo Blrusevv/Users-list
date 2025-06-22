@@ -146,3 +146,22 @@
     }
   }
 }
+
+.custom-navbar {
+  .navbar-brand {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #ffc107 !important;
+    }
+  }
+}
