@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-export const schema = yup.object({
+export const userSchema = yup.object({
   username: yup.string().required('Username is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   address: yup.object({
@@ -8,4 +8,9 @@ export const schema = yup.object({
     suite: yup.string().required('Suite is required'),
     city: yup.string().required('City is required'),
   }),
+})
+
+export const postsSchema = yup.object().shape({
+  title: yup.string().required('Title is required'),
+  body: yup.string().required('Body is required'),
 })

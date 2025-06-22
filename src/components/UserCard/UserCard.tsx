@@ -4,7 +4,6 @@ import { User } from '../../types/user'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { schema } from '../../utils/validations'
 import { toggleUserExpansion, updateUserAsync } from '../../store/slices/usersSlice'
 import InputField from '../InputField'
 import { getFieldError } from '../../utils/getFieldError'
@@ -12,6 +11,7 @@ import { UserCardProps, UserFormData } from './interfaces'
 import { formFields } from './data'
 import { ChevronDown, ChevronUp, User as UserIcon, Mail, Eye } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { userSchema } from '../../utils/validations'
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const [hasChanges, setHasChanges] = useState(false)
@@ -27,7 +27,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
     control,
     watch,
   } = useForm<UserFormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(userSchema),
     defaultValues: {
       username: user.username,
       email: user.email,

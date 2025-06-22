@@ -22,3 +22,22 @@
     gap: 1rem;
   }
 }
+
+.user-posts-page {
+  .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .page-title {
+      color: #343a40;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: #6c757d;
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+  }
+}
