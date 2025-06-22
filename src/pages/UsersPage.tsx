@@ -42,7 +42,6 @@ const UsersPage: React.FC = () => {
         <Col>
           <div className="page-header mb-4">
             <h1 className="page-title">Users Management</h1>
-            <p className="page-subtitle">Manage user information and navigate to their posts</p>
           </div>
 
           {users.length === 0 ? (

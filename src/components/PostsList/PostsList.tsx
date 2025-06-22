@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, Button, Alert, Modal, Form } from 'react-bootstrap'
+import { Card, Button, Alert, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Edit3, Trash2, FileText } from 'lucide-react'
@@ -8,10 +8,11 @@ import { deletePostAsync, updatePostAsync } from '../../store/slices/postsSlice'
 import { useAppDispatch } from '../../hooks'
 import { postsSchema } from '../../utils/validations'
 import { PostFormData, PostsListProps } from './inetrfaces'
+import ConfirmationModal from '../ConfirmationModal'
 
 const PostsList: React.FC<PostsListProps> = ({ posts }) => {
   const [editingPost, setEditingPost] = useState<Post | null>(null)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [postToDelete, setPostToDelete] = useState<Post | null>(null)
   const dispatch = useAppDispatch()
 
@@ -44,19 +45,19 @@ const PostsList: React.FC<PostsListProps> = ({ posts }) => {
 
   const handleDeletePost = (post: Post) => {
     setPostToDelete(post)
-    setShowDeleteModal(true)
+    setShowModal(true)
   }
 
   const confirmDeletePost = async () => {
     if (postToDelete) {
       await dispatch(deletePostAsync(postToDelete.id))
-      setShowDeleteModal(false)
+      setShowModal(false)
       setPostToDelete(null)
     }
   }
 
   const cancelDeletePost = () => {
-    setShowDeleteModal(false)
+    setShowModal(false)
     setPostToDelete(null)
   }
 
@@ -145,28 +146,12 @@ const PostsList: React.FC<PostsListProps> = ({ posts }) => {
         </div>
       </div>
 
-      <Modal show={showDeleteModal} onHide={cancelDeletePost}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this post? This action cannot be undone.
-          {postToDelete && (
-            <div className="mt-3 p-3 bg-light rounded">
-              <strong>{postToDelete.title}</strong>
-              <p className="mb-0 mt-1 text-muted">{postToDelete.body.substring(0, 100)}...</p>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={cancelDeletePost}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={confirmDeletePost}>
-            Delete Post
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ConfirmationModal
+        show={showModal}
+        onCancel={cancelDeletePost}
+        onConfirm={confirmDeletePost}
+        post={postToDelete}
+      />
     </>
   )
 }
