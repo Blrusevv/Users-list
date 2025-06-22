@@ -1,0 +1,34 @@
+.user-card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .user-card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+
+    .btn-group {
+      .btn {
+        min-width: 80px;
+      }
+    }
+  }
+}
